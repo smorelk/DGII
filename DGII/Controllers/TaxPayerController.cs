@@ -2,6 +2,7 @@
 using DGII.DatabaseContext;
 using Microsoft.AspNetCore.Mvc;
 using DGII.Model;
+using DGII.Errors;
 
 namespace DGII.Controllers
 {
@@ -31,7 +32,15 @@ namespace DGII.Controllers
         [HttpPost("/taxpayers/insert")]
         public async Task<ActionResult> AddTaxPayers([FromBody]IEnumerable<TaxPayer> taxPayers)
         {
-            dgiiRepository.AddTaxPayers(taxPayers);
+            try
+            {
+                dgiiRepository.AddTaxPayers(taxPayers);
+            } catch (InvalidOperationException)
+            {
+                var errorType = new Error { Kind = ErrorType.ObjectFieldNullError };
+                HttpContext.Features.Set(errorType);
+                return BadRequest();
+            }
             return Ok();
         }
     }
