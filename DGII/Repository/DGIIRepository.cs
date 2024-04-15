@@ -29,6 +29,14 @@ namespace DGII.Repository
             _context.SaveChanges();
         }
 
+        public TaxDetail GetTaxDetail(string taxPayerId)
+        {
+            var receipts = _context.TaxReceipts.Where(t => t.TaxPayerId == taxPayerId).ToList();
+            var totalTaxes = receipts.Sum(t => t.TaxAmount);
+
+            return new TaxDetail { Total = totalTaxes, TaxReceipts = receipts };
+        }
+
         public IEnumerable<TaxPayer> GetTaxPayers()
         {
             var taxPayers = _context.TaxPayers.ToList();

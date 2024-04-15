@@ -7,6 +7,8 @@ namespace DGII.Repository
         IEnumerable<TaxPayer> GetTaxPayers();
         IEnumerable<TaxReceipt> GetTaxReceipts();
 
+        TaxDetail GetTaxDetail(string taxPayerId);
+
         void AddTaxPayers(IEnumerable<TaxPayer> taxPayers);
         void AddTaxReceipts(IEnumerable<TaxReceipt> taxReceipts);
     }

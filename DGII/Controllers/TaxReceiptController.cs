@@ -36,6 +36,16 @@ namespace DGII.Controllers
             return Ok();
         }
 
+        [HttpGet("/receipts/{taxPayerId}")]
+        public async Task<ActionResult> GetTaxDetail(string taxPayerId)
+        {
+            var detail = dgiiRepository.GetTaxDetail(taxPayerId);
+            if (detail == null)
+                return NotFound();
+
+            return Ok(detail);
+        }
+
 
     }
 }
