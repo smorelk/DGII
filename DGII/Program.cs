@@ -1,10 +1,12 @@
 using DGII.DatabaseContext;
 using DGII.Repository;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+const string corsPolicy = "AllowAll";
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<DGIIContext>(opt =>
@@ -13,6 +15,15 @@ builder.Services.AddDbContext<DGIIContext>(opt =>
 builder.Services.AddScoped<IRepository, DGIIRepository>();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy(name: corsPolicy, builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -24,7 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors();
+app.UseCors(corsPolicy);
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
